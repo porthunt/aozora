@@ -5,7 +5,7 @@ import argparse
 import logging
 from distutils.dir_util import copy_tree
 
-DEFAULT_PROJECT_CONTENT = "project_content/"
+DEFAULT_PROJECT_CONTENT = "app/"
 
 
 def create_project_content(name: str, location: str):
@@ -33,6 +33,7 @@ def edit_file(name: str, location: str, _from: str, _to: str):
 def customize_project_content(name: str, location: str):
     edit_file(f"{name}/app/settings.py", location, r"{{SERVICE_NAME}}", name)
     edit_file(f"{name}/serverless.yml", location, r"{{SERVICE_NAME}}", name)
+    edit_file(f"{name}/README.md", location, r"{{SERVICE_NAME}}", name)
 
 
 def project_name(name):
