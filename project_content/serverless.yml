@@ -1,0 +1,43 @@
+service: {{SERVICE_NAME}}
+
+custom:
+  vars: ${file(vars.yml):${opt:stage, "self:provider.stage"}, file(vars.yml):dev}
+
+provider:
+  name: aws
+  runtime: python3.8
+  lambdaHashingVersion: 20201221
+  region: ${self:custom.vars.REGION}
+  stage: ${self:custom.vars.STAGE}
+  versionFunctions: false
+  environment:
+    ENVIRONMENT: ${self:custom.vars.STAGE}
+  httpApi:
+    cors: true
+  iam:
+    role:
+      name: {{SERVICE_NAME}}-role
+      statements:
+        - Effect: 'Allow'
+          Action:
+            - 'xray:PutTraceSegments'
+            - 'xray:PutTelemetryRecords'
+          Resource: '*'
+        - Effect: 'Allow'
+          Action:
+            - 'iam:getRolePolicy'
+          Resource: '*'
+
+plugins:
+  - serverless-python-requirements
+  - serverless-offline
+  - serverless-plugin-tracing
+
+functions:
+
+  health:
+      handler: app.endpoints.others.health
+      events:
+        - httpApi:
+            method: GET
+            path: /health
