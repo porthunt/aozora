@@ -37,7 +37,7 @@ def customize_project_content(name: str, location: str):
 
 
 def project_name(name):
-    if re.search(r"[^\w\-_\. ]", name):
+    if re.search(r"[^\w\-_\. ]", name) or " " in name:
         logging.error(
             "Invalid project name. Use only letters, numbers and dashes."
         )

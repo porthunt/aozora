@@ -29,9 +29,7 @@ provider:
           Resource: '*'
 
 plugins:
-  - serverless-python-requirements
   - serverless-offline
-  - serverless-plugin-tracing
 
 functions:
 

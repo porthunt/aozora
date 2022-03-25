@@ -4,8 +4,8 @@ init:
 	@pip install -r requirements.txt
 
 lint:
-	flake8 app/ tests/ aozora.py
-	black --line-length 79 --check app/ tests/ aozora.py
+	flake8 app/ tests/
+	black --line-length 79 --check app/ tests/
 
 unit:
 	pytest --disable-pytest-warnings tests/unit/

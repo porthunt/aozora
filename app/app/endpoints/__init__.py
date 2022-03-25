@@ -1,8 +1,8 @@
-import json
 import uuid
 from functools import wraps
 from app.settings import logger
 from app.errors import Error, UnexpectedError
+from app.models.response import Response
 
 
 def endpoint():
@@ -12,7 +12,7 @@ def endpoint():
             try:
                 event = args[0]
                 _args = [event, *args[1:]]
-                body, status_code = function(*_args)
+                response = function(*_args)
             except Exception as e:
                 error_id = str(uuid.uuid4())
                 logger.exception(error_id)
@@ -20,12 +20,8 @@ def endpoint():
                     e = UnexpectedError(
                         message="Unexpected error", error_id=error_id
                     )
-                body = e.to_json()
-                status_code = e.status_code
-            return {
-                "statusCode": status_code,
-                "body": json.dumps(body),
-            }
+                response = Response(code=e.status_code, data=e.to_json())
+            return response.to_json()
 
         return wrapper
 
